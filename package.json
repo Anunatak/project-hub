@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "coffeeify": "^2.0.1",
+    "gulp": "^3.9.1",
+    "hbsfy": "^2.5.1",
+    "laravel-elixir": "^5.0.0"
+  },
+  "dependencies": {
+    "backbone": "^1.2.3",
+    "handlebars": "^4.0.5",
+    "jquery": "^2.2.1",
+    "moment": "^2.11.2",
+    "underscore": "^1.8.3"
+  }
+}

@@ -1,0 +1,11 @@
+{
+	"name": "Project Name",
+	"milestones": [
+		{
+			"date": "2016/03/01",
+			"title": "Project Got Started",
+			"text": "We've forked this mofo.",
+			"link": "#"
+		}
+	]
+}
