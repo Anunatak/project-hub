@@ -1,0 +1,24 @@
+{{#each []}}
+	<li class="tl-node">
+		{{#if date}}
+			<div class="tl-stamp">{{ date }}</div>
+		{{/if}}
+		{{#if title}}
+			<div class="tl-content">{{ title }}</div>
+		{{/if}}
+		{{#if date}}
+			{{#if link}}
+			<a href="{{ link }}">
+			{{else}}
+			<span>
+			{{/if}}
+				{{ text }}
+			{{#if link}}
+			</a>
+			{{else}}
+			</span>
+			{{/if}}
+		{{/if}}
+	</li>
+{{/each}}
+

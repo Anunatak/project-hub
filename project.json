@@ -1,8 +1,14 @@
 {
-	"name": "Project Name",
+	"name": "Testprosjekt",
+	"date_format": "D. MMMM YYYY",
 	"milestones": [
 		{
 			"date": "2016/03/01",
+			"title": "Project Got Started",
+			"text": "We've forked this mofo."
+		},
+		{
+			"date": "2016/03/07",
 			"title": "Project Got Started",
 			"text": "We've forked this mofo.",
 			"link": "#"

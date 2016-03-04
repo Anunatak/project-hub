@@ -1,37 +1,13 @@
 ## Load modules
-$        = require('jquery')
-Backbone = require 'backbone'
-_        = require 'underscore'
-moment   = require 'moment'
+Hub = require './classes/Hub.coffee'
+$   = require 'jquery'
 
-## Set backbone's Jquery
-Backbone.$ = $
+# Start the hub
+hub = new Hub('#timeline');
 
-## Namespace
-App =
-	Models: {}
-	Collections: {}
+# Fetch hub data
+hub.fetch () ->
+	@timelineView.render()
+	document.title = @project.get 'name'
+	$('h1#project-name').html @project.get 'name'
 
-## Create the milestone model
-App.Models.Milestone = Backbone.Model.extend
-	defaults:
-		'title': ''
-		'date': moment()
-		'text': ''
-		'link': null
-	initialize: () ->
-		@date = moment @date, 'YYYY/MM/DD'
-
-## Create the milestones collection
-App.Collections.Milestones = Backbone.Collection.extend
-	url: '/project.json'
-	initialize: () ->
-		@fetch()
-	model: App.Models.Milestone
-	parse: (response) ->
-		response.milestones
-
-App.Milestones = new App.Collections.Milestones();
-
-$(window).load () ->
-	console.log(App.Milestones.length);
