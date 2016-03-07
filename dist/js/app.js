@@ -18276,7 +18276,7 @@ Hub = require('./classes/Hub.coffee');
 
 $ = require('jquery');
 
-hub = new Hub('#timeline');
+hub = new Hub('#timeline', '');
 
 hub.fetch(function() {
   this.timelineView.render();
@@ -18318,6 +18318,8 @@ Hub = (function() {
   }
 
   Hub.prototype.createModels = function() {
+    var that;
+    that = this;
     this.models.Milestone = Backbone.Model.extend({
       defaults: {
         'title': '',
@@ -18325,33 +18327,36 @@ Hub = (function() {
         'text': '',
         'link': null
       },
-      initialize: function() {},
       parse: function(response) {
         response.date = moment(response.date, 'YYYY/MM/DD');
-        response.date = response.date.format('D. MMMM YYYY');
+        response.date = response.date.format(that.project.get('date_format'));
         return response;
+      },
+      toJSON: function() {
+        var attrs, date;
+        attrs = _.clone(this.attributes);
+        date = moment(attrs.date, 'YYYY/MM/DD');
+        attrs.date = date.format(that.project.get('date_format'));
+        return attrs;
       }
     });
     return this.models.Project = Backbone.Model.extend({
       url: '/project.json',
       parse: function(response) {
-        delete response.milestones;
         return response;
       }
     });
   };
 
   Hub.prototype.createCollections = function() {
+    var that;
+    that = this;
     return this.collections.Milestones = Backbone.Collection.extend({
-      url: '/project.json',
       model: this.models.Milestone,
       comparator: function(model) {
         var date;
-        date = moment(model.get('date'), 'D. MMMM YYYY');
+        date = moment(model.get('date'), that.project.get('date_format'));
         return date.format('YYYYMMDD');
-      },
-      parse: function(response) {
-        return response.milestones;
       }
     });
   };
@@ -18382,7 +18387,8 @@ Hub = (function() {
     that = this;
     return this.project.fetch({
       success: function() {
-        return that.milestones.add(that.project.callback.call(that));
+        that.milestones.add(that.project.get('milestones'));
+        return callback.call(that);
       }
     });
   };

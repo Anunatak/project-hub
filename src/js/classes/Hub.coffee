@@ -26,34 +26,36 @@ class Hub
 		@initialize()
 
 	createModels: () ->
+		that = @
 		@models.Milestone = Backbone.Model.extend
 			defaults:
 				'title': ''
 				'date': moment()
 				'text': ''
 				'link': null
-			initialize: () ->
-				# @date = moment @date, 'YYYY/MM/DD'
-				# @date = @date.format 'D. MMMM YYYY'
 			parse: (response) ->
 				response.date = moment response.date, 'YYYY/MM/DD'
-				response.date = response.date.format 'D. MMMM YYYY'
+				response.date = response.date.format that.project.get 'date_format'
 				response
+			toJSON: () ->
+				attrs = _.clone @attributes
+				date = moment attrs.date, 'YYYY/MM/DD'
+				attrs.date = date.format that.project.get 'date_format'
+				attrs
+
 		@models.Project = Backbone.Model.extend
 			url: '/project.json'
 			parse: (response) ->
-				delete response.milestones
 				response
 
 	createCollections: () ->
+		that = @
 		@collections.Milestones = Backbone.Collection.extend
-			url: '/project.json'
 			model: @models.Milestone
 			comparator: (model) ->
-				date = moment model.get('date'), 'D. MMMM YYYY'
-				return date.format 'YYYYMMDD'
-			parse: (response) ->
-				response.milestones
+				date = moment model.get('date'), that.project.get 'date_format'
+				date.format 'YYYYMMDD'
+
 	createViews: () ->
 		@views.Timeline = Backbone.View.extend
 			el: @el
@@ -73,7 +75,7 @@ class Hub
 		that = @
 		@project.fetch
 			success: () ->
-				that.milestones.add that.project.
+				that.milestones.add that.project.get 'milestones'
 				callback.call that
 
 module.exports = Hub
